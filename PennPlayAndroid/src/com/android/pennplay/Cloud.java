@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class Cloud {
-	private Bitmap bitmap;
+	private Bitmap bitmap;	// currently assumes bitmap is rectanglular
 	private int x;		// center x coordinate
 	private int y;		// center y coordinate
 	private int width;
