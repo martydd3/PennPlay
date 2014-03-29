@@ -1,9 +1,8 @@
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class Rock {
-	private Bitmap bitmap;
+	private Bitmap bitmap;	// currently assumes bitmap is rectangular
 	private int x;		// center x coordinate, can update
 	private int y;		// center y coordinate, should be constant
 	private int width;
