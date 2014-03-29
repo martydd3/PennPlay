@@ -76,4 +76,18 @@ public class Wave {
     public Bitmap getBitmap() {
         return mWave;
     }
+    public boolean inBoundingBox(Ship s) {
+    	int sx1 = s.getX();		
+	int sy1 = s.getY(); 
+	int rx1 = mX - mWave.getWidth()/2;
+	int rx2 = mX + mWave.getWidth()/2;
+	int ry1 = Water.height - Water.defHeight - mHeight;
+	int ry2 = Water.height - Water.defHeight - mHeight + mWave.getHeight();
+	if (sx1 <= rx1 || sx1 >= rx2 || sy1 >= ry2 || sy1 <= ry1) {
+		return false;
+	}
+	else {
+		return true;
+	}
+    }    
 }
