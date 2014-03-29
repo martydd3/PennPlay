@@ -1,23 +1,27 @@
 package com.android.pennplay;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
+
+/**
+ * 
+ * @author Martin
+ * Main activity of the app, sets up the user interface
+ */
 
 public class MainActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //Turn window title off
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //set window to full screen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        
+        setContentView(new MainGamePanel(this));
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    
-    // James was here
 }
