@@ -35,13 +35,16 @@ public class Water {
         waves = new ArrayList<Wave>();
     }
     
-    public void update(){
+    public void update(Ship ship){
         for(int i = 0; i < waves.size(); i++){
             Wave w = waves.get(i);
             w.update();
             
-            if(w.getHeight() < 0 || w.getLoc() < 0)
+            if(w.getHeight() > height - defHeight || w.getLoc() < -w.getBitmap().getWidth())
                 waves.remove(i); 
+            
+            //collision detection with ship
+            w.moveShip(ship);
         }
     }
     

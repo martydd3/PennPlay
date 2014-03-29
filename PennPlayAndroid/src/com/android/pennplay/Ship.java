@@ -43,6 +43,6 @@ public class Ship {
 	}
 	
 	public void draw(Canvas canvas) {
-		canvas.drawBitmap(bitmap, x - width/2, y - height/2, null);
+		canvas.drawBitmap(bitmap, x - width/2, y - height, null);
 	}
 }

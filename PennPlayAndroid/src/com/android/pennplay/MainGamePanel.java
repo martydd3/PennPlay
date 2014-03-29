@@ -28,6 +28,7 @@ public class MainGamePanel extends SurfaceView
     
     //Game entities
     private Water water;
+    private Ship ship;
     
     public MainGamePanel(Context context) {
         super(context);
@@ -49,6 +50,8 @@ public class MainGamePanel extends SurfaceView
     public void surfaceCreated(SurfaceHolder holder) {     
         //initialize game entities
         water = new Water(getWidth(), getHeight(), BitmapFactory.decodeResource(getResources(), R.drawable.wave));
+        ship = new Ship(getWidth()/3, getHeight()-Water.defHeight, 
+                BitmapFactory.decodeResource(getResources(), R.drawable.ship));
         
         thread.setRunning(true);
         thread.start();
@@ -85,10 +88,11 @@ public class MainGamePanel extends SurfaceView
     protected void onDraw(Canvas canvas){
         //Log.i("mainGamePanel", "onDraw");
         canvas.drawColor(Color.BLACK);
-        water.draw(canvas);
+        ship.draw(canvas);
+        water.draw(canvas); 
     }
     
     public void update(){
-        water.update();
+        water.update(ship);
     }
 }
