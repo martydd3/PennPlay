@@ -1,9 +1,8 @@
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class Ship {
-	private Bitmap bitmap;
+	private Bitmap bitmap;	// currently assumes bitmap is rectangular
 	private int x;		// center x coordinate
 	private int y;		// center y coordinate
 	private int width;
