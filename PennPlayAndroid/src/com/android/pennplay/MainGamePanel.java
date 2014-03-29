@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -29,6 +29,8 @@ public class MainGamePanel extends SurfaceView
     //Game entities
     private Water water;
     private Ship ship;
+    
+    private String avgFps;
     
     public MainGamePanel(Context context) {
         super(context);
@@ -90,9 +92,19 @@ public class MainGamePanel extends SurfaceView
         canvas.drawColor(Color.GRAY);
         ship.draw(canvas);
         water.draw(canvas); 
+        
+        if(avgFps != null){
+            Paint paint = new Paint();
+            paint.setARGB(255, 255, 255, 255);
+            canvas.drawText(avgFps, this.getWidth()-50, 20, paint);
+        }
     }
     
     public void update(){
         water.update(ship);
+    }
+    
+    public void setAvgFps(String avgFps){
+        this.avgFps = avgFps;
     }
 }

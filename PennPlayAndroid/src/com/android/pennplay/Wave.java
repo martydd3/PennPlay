@@ -27,7 +27,7 @@ public class Wave {
     }
     
     public void draw(Canvas canvas){
-        canvas.drawBitmap(mShape, mX, mHeight, null);
+        canvas.drawBitmap(mWave, mX, mHeight, null);
     }
     
     public void update(){
