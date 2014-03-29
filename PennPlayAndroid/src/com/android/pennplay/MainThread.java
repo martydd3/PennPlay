@@ -2,6 +2,7 @@ package com.android.pennplay;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 /**
@@ -40,6 +41,8 @@ public class MainThread extends Thread{
             try{
                 canvas = mSurfaceHolder.lockCanvas();
                 synchronized(mSurfaceHolder){
+                    //Log.i("MainThread", "draw");
+                    mGamePanel.update();
                     mGamePanel.onDraw(canvas);
                 }
             } finally {
