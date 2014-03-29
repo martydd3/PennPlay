@@ -60,7 +60,7 @@ public class Water {
     
     public void onClick(int x){
         MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.wavesound);
-		mp.start();                                 // starts wave sound
+		mp.start();                                 // starts wave sound, sound is from https://www.youtube.com/watch?v=4gGuoP8F10g
 		
         if(curWave != null){
             curWave.setRising(false);
