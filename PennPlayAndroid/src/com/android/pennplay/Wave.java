@@ -47,4 +47,8 @@ public class Wave {
     public int getLoc(){
         return mX;
     }
+    
+    public Bitmap getBitmap() {
+        return mWave;
+    }
 }
