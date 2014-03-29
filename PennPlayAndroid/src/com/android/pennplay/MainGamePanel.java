@@ -1,6 +1,7 @@
 package com.android.pennplay;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
@@ -34,7 +35,7 @@ public class MainGamePanel extends SurfaceView
         //getHolder() will call surfaceChanged(...), surfaceCreated(...) etc
         //from their body
         getHolder().addCallback(this);
-               
+        
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
     }
@@ -45,10 +46,9 @@ public class MainGamePanel extends SurfaceView
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {    
+    public void surfaceCreated(SurfaceHolder holder) {     
         //initialize game entities
-        Log.i("mainGamePanel", getWidth() + " pixels wide");
-        water = new Water(getWidth(), getHeight());
+        water = new Water(getWidth(), getHeight(), BitmapFactory.decodeResource(getResources(), R.drawable.wave));
         
         thread.setRunning(true);
         thread.start();
@@ -58,7 +58,6 @@ public class MainGamePanel extends SurfaceView
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
         while(retry){
-            Log.i("mainGamePanel", "onDestroy");
             thread.setRunning(false);
             try{
                 thread.join();
@@ -73,12 +72,10 @@ public class MainGamePanel extends SurfaceView
     public boolean onTouchEvent(MotionEvent event){
 
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            water.onPressed(event.getX());
-            Log.i("mainGamePanel", "onTouchEvent Action Down");
+            water.onClick((int)event.getX());
         }
         else if(event.getAction() == MotionEvent.ACTION_UP){
-            water.onRelease();
-            Log.i("mainGamePanel", "onTouchEvent Action Up");
+
         }
         
         return super.onTouchEvent(event);
