@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
+import android.media.MediaPlayer;
 
 public class Water {
 
@@ -58,6 +59,9 @@ public class Water {
     }
     
     public void onClick(int x){
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.wavesound);
+		mp.start();                                 // starts wave sound
+		
         if(curWave != null){
             curWave.setRising(false);
         }  
