@@ -19,11 +19,12 @@ public class Water {
     public static int defHeight;
     
     private Bitmap mWave;
+    private Bitmap waveShape;
     
     private ArrayList<Wave> waves;
     private Wave curWave;
     
-    public Water(int w, int h, Bitmap wave){
+    public Water(int w, int h, Bitmap wave, Bitmap wShape){
         width = w;
         height = h;
         
@@ -33,10 +34,12 @@ public class Water {
         paint.setColor(Color.rgb(35, 29, 67));
         
         mWave = wave;
+        waveShape = wShape;
         waves = new ArrayList<Wave>();
     }
     
     public void update(Ship ship){
+        ship.resetRidden();
         for(int i = 0; i < waves.size(); i++){
             Wave w = waves.get(i);
             w.update();
@@ -45,7 +48,7 @@ public class Water {
                 waves.remove(i); 
             
             //collision detection with ship
-            w.moveShip(ship);
+            ship.rideWave(w);
         }
     }
     
@@ -66,7 +69,7 @@ public class Water {
             curWave.setRising(false);
         }  
         
-        curWave = new Wave(x, mWave);
+        curWave = new Wave(x, mWave, waveShape);
         waves.add(curWave);
     }
     

@@ -49,7 +49,8 @@ public class MainGamePanel extends SurfaceView
     @Override
     public void surfaceCreated(SurfaceHolder holder) {     
         //initialize game entities
-        water = new Water(getWidth(), getHeight(), BitmapFactory.decodeResource(getResources(), R.drawable.wave));
+        water = new Water(getWidth(), getHeight(), BitmapFactory.decodeResource(getResources(), R.drawable.wave),
+                BitmapFactory.decodeResource(getResources(), R.drawable.shape));
         ship = new Ship(getWidth()/3, getHeight()-Water.defHeight, 
                 BitmapFactory.decodeResource(getResources(), R.drawable.ship));
         
@@ -78,16 +79,15 @@ public class MainGamePanel extends SurfaceView
             water.onClick((int)event.getX());
         }
         else if(event.getAction() == MotionEvent.ACTION_UP){
-
-        }
-        
+            water.onRelease();
+        }       
         return super.onTouchEvent(event);
     }
     
     @Override
     protected void onDraw(Canvas canvas){
         //Log.i("mainGamePanel", "onDraw");
-        canvas.drawColor(Color.BLACK);
+        canvas.drawColor(Color.GRAY);
         ship.draw(canvas);
         water.draw(canvas); 
     }

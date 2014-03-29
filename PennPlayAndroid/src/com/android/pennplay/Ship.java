@@ -7,7 +7,11 @@ public class Ship {
 	private Bitmap currentBitmap;	// currently assumes bitmap is rectangular
 	private Bitmap[] bitmaps;
 	private int x;		// center x coordinate
+	
 	private int y;		// center y coordinate
+	private int tempY;  //holds the height of the highest wave ridden
+	private boolean waveRidden;
+	
 	private int width;
 	private int height;
 	private int state;	// current state
@@ -15,9 +19,11 @@ public class Ship {
 	private int rising;  // state 1
 	private int falling;  // state 2
 	
+	public boolean updated;   //holds whether ship has already been changed by a wave
+	
 	public Ship(int x, int y, Bitmap b) {
 		this.x = x;
-		this.y = y;
+		this.y = y+20;
 		currentBitmap = b;
 		width = b.getWidth();
 		height = b.getHeight();
@@ -25,6 +31,25 @@ public class Ship {
 		level = 0;
 		rising = 1;
 		falling = 2;
+		
+		updated = false;
+	}
+	
+	public void rideWave(Wave w)
+	{
+	    if(w.inWave(this)){
+	        int tY = w.moveShip(this);
+	        if(tY < tempY)
+	            tempY = tY;
+	    }
+	}
+	
+	public void resetRidden()
+	{
+	    if(Math.abs(y-tempY)<50)
+	        y = tempY;
+	    
+	    tempY = Water.height-Water.defHeight+20;
 	}
 	
 	public int getX() {
@@ -52,10 +77,7 @@ public class Ship {
 	}
 	
 	public void draw(Canvas canvas) {
-<<<<<<< HEAD
-		canvas.drawBitmap(bitmap, x - width/2, y - height, null);
-=======
-		canvas.drawBitmap(currentBitmap, x - width/2, y - height/2, null);
+		canvas.drawBitmap(currentBitmap, x - width/2, y - height, null);
 	}
 	
 	public Bitmap getCurrentBitmap() {
@@ -72,6 +94,5 @@ public class Ship {
 		else if (state == 2) {
 			currentBitmap = bitmaps[2];
 		}
->>>>>>> 12ad1d10daab6a5bbd77d81335d65ff59743677b
 	}
 }

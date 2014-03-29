@@ -9,24 +9,29 @@ public class Wave {
 
     private int mX;
     private int mHeight;
+    private int maxHeight;
     
     private Bitmap mWave;
+    private Bitmap mShape;
     
     private boolean mRising;
     
-    public Wave(int x, Bitmap wave){
+    public Wave(int x, Bitmap wave, Bitmap shape){
         mX = x - wave.getWidth()/2;
         mHeight = Water.height-Water.defHeight;
         mWave = wave;
+        mShape = shape;
         mRising = true;
+        
+        maxHeight = Water.height-Water.defHeight - mShape.getHeight()+30;
     }
     
     public void draw(Canvas canvas){
-        canvas.drawBitmap(mWave, mX, mHeight, null);
+        canvas.drawBitmap(mShape, mX, mHeight, null);
     }
     
     public void update(){
-        if(mRising && mHeight > 0){
+        if(mRising && mHeight > maxHeight){
             mHeight -= 10;
         }
         else if(!mRising){
@@ -40,29 +45,34 @@ public class Wave {
         mRising = b;
     }
     
-    public void moveShip(Ship ship){
-        if(ship.getX() > mX && ship.getX()-mX < mWave.getWidth()){
-            int shipX =ship.getX() - mX;
-            int shipY = ship.getY()-mHeight;
+    public int moveShip(Ship ship){
+        int shipX =ship.getX() - mX;
+        int shipY = ship.getY()-mHeight;
 
-            if(shipX >= 0 && shipX < mWave.getWidth() && shipY >= 0 && shipY < mWave.getHeight()){
-                int[] pixels = new int[mWave.getHeight()];
-                Bitmap column = Bitmap.createBitmap(mWave, shipX, 0, 1, mWave.getHeight());
-                column.getPixels(pixels, 0, column.getWidth(), 0, 0, 1, column.getHeight());
-                
-                int i = 0;
-                while(i < pixels.length && pixels[i] == Color.TRANSPARENT)
-                    i++;
-                
-                if(mHeight + i < Water.height-Water.defHeight-20)
-                    ship.setY(mHeight + i+20);
-                else
-                    ship.setY(Water.height-Water.defHeight+20);
+        if(shipX >= 0 && shipX < mShape.getWidth() && shipY >= 0 && shipY < mShape.getHeight()){
+            int[] pixels = new int[mShape.getHeight()];
+            Bitmap column = Bitmap.createBitmap(mShape, shipX, 0, 1, mShape.getHeight());
+            column.getPixels(pixels, 0, column.getWidth(), 0, 0, 1, column.getHeight());
+            
+            int i = 0;
+            while(i < pixels.length && pixels[i] == Color.TRANSPARENT)
+                i++;
+            
+            //if new height is above waterline
+            if(mHeight + i < Water.height-Water.defHeight+20){
+                return mHeight + i+20;
+            }      
+            else{
+                return Water.height-Water.defHeight+20;
             }
-        }
+        }          
         else{
-            ship.setY(Water.height-Water.defHeight+20);
+            return Water.height- Water.defHeight+20;
         }
+    }
+    
+    public boolean inWave(Ship ship){
+        return ship.getX() > mX && ship.getX()-mX < mShape.getWidth();
     }
     
     public int getHeight(){
