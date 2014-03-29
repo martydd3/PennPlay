@@ -59,41 +59,6 @@ public class Ship {
 		return currentBitmap;
 	}
 	
-	// updates location of this ship to be on the wave
-	// changes bitmap of this ship
-	public void changeState(Wave w) {
-		if (w.inBoundingBox(this)) {
-			Bitmap bWave = w.getBitmap();
-			int yWave = Water.height - Water.defHeight - w.getHeight();
-			try {
-				int adjustedWidth = x - (w.getLoc() - bWave.getWidth()/2);
-				int adjustedHeight = y - Water.height - Water.defHeight - w.getHeight();
-				int color = bWave.getPixel(adjustedWidth, adjustedHeight);
-				while (color != Color.TRANSPARENT) { // not sure which color constant to pick...
-					if (y > yWave) {
-						y--;
-						state = rising;
-					}
-					else if (y == yWave) {
-						y++;
-						state = level;
-					}
-					else {
-						y++;
-						state = falling;
-					}
-					adjustedHeight = y - Water.height - Water.defHeight - w.getHeight();
-					color = bWave.getPixel(adjustedWidth, adjustedHeight);
-				}
-			}
-			catch (IllegalArgumentException e) {
-			}
-		}
-		else {
-		}
-	}
-	
-	
 	public void updateCurrentBitmap() {
 		if (state == 0) {
 			currentBitmap = bitmaps[0];
