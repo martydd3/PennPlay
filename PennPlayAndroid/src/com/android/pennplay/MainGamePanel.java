@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -43,6 +44,8 @@ public class MainGamePanel extends SurfaceView
     
     private Bitmap[] crashBits;
     
+    public static MediaPlayer mp;
+    
     public MainGamePanel(Context context) {
         super(context);
         
@@ -50,10 +53,12 @@ public class MainGamePanel extends SurfaceView
         //from their body
         getHolder().addCallback(this);
         
+        mp = MediaPlayer.create(context, R.raw.backgroundominous);  
+        
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
     }
-
+    
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
@@ -81,6 +86,9 @@ public class MainGamePanel extends SurfaceView
         
         endGame = false;
   
+        mp.setLooping(true);
+        mp.start();
+        
         thread.setRunning(true);
         thread.start();
     }
