@@ -56,9 +56,6 @@ public class Water {
         for(int i = 0; i < waves.size(); i++){
             waves.get(i).draw(canvas);
         }
-        
-        Rect rect = new Rect(0, height-defHeight, width, height);
-        canvas.drawRect(rect, paint);
     }
     
     public void onClick(int x){

@@ -2,6 +2,8 @@ package com.android.pennplay;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.util.Log;
 
 public class Rock {
 	private Bitmap bitmap;	// currently assumes bitmap is rectangular
@@ -36,23 +38,17 @@ public class Rock {
 		this.y = y;
 	}
 	
-	public boolean inBoundingBox(Ship s) {
-		
-		int sx1 = s.getX() - s.getWidth()/2; //left x
-		int sx2 = s.getX() + s.getWidth()/2; //right x
-		int sy1 = s.getY() - s.getHeight()/2; // bottom y
-		int sy2 = s.getY() + s.getHeight()/2; // top y
-		int rx1 = x - width/2;
-		int rx2 = x + width/2;
-		int ry1 = y - height/2;
-		int ry2 = y + height/2;
-		if (sx2 < rx1 || sx1 > rx2 || sy1 > ry2 || sy2 < ry1) {
-			return false;
-		}
-		else {
-			return true;
-		}
-		
+	public boolean intersectsShip(Ship s) {
+	    int shipX =s.getX() - x;
+        int shipY = s.getY()-y;
+
+        if(shipX >= 0 && shipX < width && shipY >= 0 && shipY < height){
+            int color = bitmap.getPixel(shipX, shipY);
+            
+            if(color == Color.TRANSPARENT)
+                return true;
+        }          
+        return false;
 	}
 	
 	public void updateX() {
@@ -60,7 +56,7 @@ public class Rock {
 	}
 	
 	public void draw(Canvas canvas) {
-		canvas.drawBitmap(bitmap, x - width/2, y - height/2, null);
+		canvas.drawBitmap(bitmap, x - width/2, y, null);
 	}
 }
 

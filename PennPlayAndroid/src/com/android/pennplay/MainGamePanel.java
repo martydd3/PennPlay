@@ -1,10 +1,14 @@
 package com.android.pennplay;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,15 +26,17 @@ public class MainGamePanel extends SurfaceView
 
     private MainThread thread;
     
-    //holds the size of the screen;
-    private int mWidth;
-    private int mHeight;
-    
     //Game entities
     private Water water;
     private Ship ship;
     
     private String avgFps;
+    
+    private int rockTime;
+    private ArrayList<Rock> rocks;
+    
+    private Paint paint;
+    private Rect rect;
     
     public MainGamePanel(Context context) {
         super(context);
@@ -53,8 +59,16 @@ public class MainGamePanel extends SurfaceView
         //initialize game entities
         water = new Water(getWidth(), getHeight(), BitmapFactory.decodeResource(getResources(), R.drawable.wave),
                 BitmapFactory.decodeResource(getResources(), R.drawable.shape));
-        ship = new Ship(getWidth()/3, getHeight()-Water.defHeight, 
+        ship = new Ship(getWidth()/2, getHeight()-Water.defHeight, 
                 BitmapFactory.decodeResource(getResources(), R.drawable.ship));
+        
+        rockTime = (int) (Math.random()*50)+25;
+        rocks = new ArrayList<Rock>();
+        
+        rect = new Rect(0, Water.height-Water.defHeight, getWidth(), getHeight());
+        
+        paint = new Paint();
+        paint.setARGB(255, 255, 255, 255);
         
         thread.setRunning(true);
         thread.start();
@@ -89,19 +103,47 @@ public class MainGamePanel extends SurfaceView
     @Override
     protected void onDraw(Canvas canvas){
         //Log.i("mainGamePanel", "onDraw");
-        canvas.drawColor(Color.GRAY);
+        canvas.drawColor(Color.BLACK);
+        
         ship.draw(canvas);
+        
         water.draw(canvas); 
         
+        for(int i = 0; i < rocks.size(); i++){
+            rocks.get(i).draw(canvas);
+        }
+        
+        
+        paint.setColor(Color.rgb(35, 29, 67));
+        canvas.drawRect(rect, paint);
+        
         if(avgFps != null){
-            Paint paint = new Paint();
-            paint.setARGB(255, 255, 255, 255);
             canvas.drawText(avgFps, this.getWidth()-50, 20, paint);
         }
     }
     
     public void update(){
         water.update(ship);
+        rockTime--;
+        
+        if(rockTime <= 0){
+            rocks.add(new Rock(getWidth()+100, (int)((Water.height-Water.defHeight-250)*Math.random()+200), -20,
+                    BitmapFactory.decodeResource(getResources(), R.drawable.rock)));
+            
+            rockTime = (int) (Math.random()*50)+25;
+        }
+        
+        for(int i = 0; i < rocks.size(); i++){
+            Rock r = rocks.get(i);
+            r.updateX();
+            
+            if(r.intersectsShip(ship)){
+                Log.i("mainGamePanel", "crunch");
+            }
+            
+            if(r.getX() < -200)
+                rocks.remove(i);
+        }
     }
     
     public void setAvgFps(String avgFps){

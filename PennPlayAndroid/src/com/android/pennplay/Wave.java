@@ -10,6 +10,7 @@ public class Wave {
     private int mX;
     private int mHeight;
     private int maxHeight;
+    private int mV;
     
     private Bitmap mWave;
     private Bitmap mShape;
@@ -22,6 +23,7 @@ public class Wave {
         mWave = wave;
         mShape = shape;
         mRising = true;
+        mV = -30;
         
         maxHeight = Water.height-Water.defHeight - mShape.getHeight()+30;
     }
@@ -32,13 +34,13 @@ public class Wave {
     
     public void update(){
         if(mRising && mHeight > maxHeight){
-            mHeight -= 10;
+            mHeight -= 15;
         }
         else if(!mRising){
             mHeight += 10;
         }
         
-        mX -= 15;
+        mX += mV;
     }
     
     public void setRising(Boolean b){
@@ -53,6 +55,9 @@ public class Wave {
             int[] pixels = new int[mShape.getHeight()];
             Bitmap column = Bitmap.createBitmap(mShape, shipX, 0, 1, mShape.getHeight());
             column.getPixels(pixels, 0, column.getWidth(), 0, 0, 1, column.getHeight());
+            
+            if(shipX > mShape.getWidth()/3)
+                mV = -5;
             
             int i = 0;
             while(i < pixels.length && pixels[i] == Color.TRANSPARENT)
@@ -85,19 +90,5 @@ public class Wave {
     
     public Bitmap getBitmap() {
         return mWave;
-    }
-    public boolean inBoundingBox(Ship s) {
-    	int sx1 = s.getX();		
-	int sy1 = s.getY(); 
-	int rx1 = mX - mWave.getWidth()/2;
-	int rx2 = mX + mWave.getWidth()/2;
-	int ry1 = Water.height - Water.defHeight - mHeight;
-	int ry2 = Water.height - Water.defHeight - mHeight + mWave.getHeight();
-	if (sx1 <= rx1 || sx1 >= rx2 || sy1 >= ry2 || sy1 <= ry1) {
-		return false;
-	}
-	else {
-		return true;
-	}
     }    
 }

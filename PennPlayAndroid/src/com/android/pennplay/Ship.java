@@ -46,9 +46,7 @@ public class Ship {
 	
 	public void resetRidden()
 	{
-	    if(Math.abs(y-tempY)<50)
-	        y = tempY;
-	    
+	    y = tempY;	    
 	    tempY = Water.height-Water.defHeight+20;
 	}
 	
