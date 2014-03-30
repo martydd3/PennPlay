@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.media.MediaPlayer;
+
 
 /**
  * 
@@ -23,5 +25,9 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         setContentView(new MainGamePanel(this));
+        // MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.backgroundominous);
+		// mp.setLooping(true);
+		// mp.start();
+        
     }
 }
