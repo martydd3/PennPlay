@@ -17,15 +17,15 @@ public class Wave {
     
     private boolean mRising;
     
-    public Wave(int x, Bitmap wave, Bitmap shape){
+    public Wave(int x, Bitmap wave, Bitmap shape){  
         mX = x - wave.getWidth()/2;
-        mHeight = Water.height-Water.defHeight;
+        mHeight = Water.height-Water.defHeight+30;
         mWave = wave;
         mShape = shape;
         mRising = true;
-        mV = -30;
+        mV = -10;
         
-        maxHeight = Water.height-Water.defHeight - mShape.getHeight()+30;
+        maxHeight = Water.height-Water.defHeight - mShape.getHeight()+100;
     }
     
     public void draw(Canvas canvas){
@@ -34,10 +34,10 @@ public class Wave {
     
     public void update(){
         if(mRising && mHeight > maxHeight){
-            mHeight -= 15;
+            mHeight -= 10;
         }
         else if(!mRising){
-            mHeight += 10;
+            mHeight += 6;
         }
         
         mX += mV;
@@ -57,7 +57,7 @@ public class Wave {
             column.getPixels(pixels, 0, column.getWidth(), 0, 0, 1, column.getHeight());
             
             if(shipX > mShape.getWidth()/3)
-                mV = -5;
+                mV = -6;
             
             int i = 0;
             while(i < pixels.length && pixels[i] == Color.TRANSPARENT)

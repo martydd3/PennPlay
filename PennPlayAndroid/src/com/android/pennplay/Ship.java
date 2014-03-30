@@ -2,6 +2,7 @@ package com.android.pennplay;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class Ship {
 	private Bitmap currentBitmap;	// currently assumes bitmap is rectangular
@@ -10,27 +11,26 @@ public class Ship {
 	
 	private int y;		// center y coordinate
 	private int tempY;  //holds the height of the highest wave ridden
-	private boolean waveRidden;
 	
 	private int width;
 	private int height;
 	private int state;	// current state
-	private int level;	// state 0
-	private int rising;  // state 1
-	private int falling;  // state 2
 	
 	public boolean updated;   //holds whether ship has already been changed by a wave
 	
-	public Ship(int x, int y, Bitmap b) {
+	public boolean crashed; 
+	
+	private int timer;
+	public int score;
+	
+	public Ship(int x, int y, Bitmap b, Bitmap[] maps) {
 		this.x = x;
-		this.y = y+20;
+		this.y = y;
 		currentBitmap = b;
 		width = b.getWidth();
 		height = b.getHeight();
 		state = 0;
-		level = 0;
-		rising = 1;
-		falling = 2;
+		bitmaps = maps;
 		
 		updated = false;
 	}
@@ -44,8 +44,38 @@ public class Ship {
 	    }
 	}
 	
+	public void update(){
+	    timer = (timer+1)%100;
+	    
+	    if(timer%10 == 0 && !crashed)
+	        score ++;
+	    
+	    if(crashed){
+	        MainGamePanel.endGame = true;
+	        if(timer < 5){
+	            state = 0;
+	            updateCurrentBitmap();
+	        }
+	        if(timer < 10){
+                state = 1;
+                updateCurrentBitmap();
+            }
+	        
+	        if(timer >= 10){
+	            state = 2;
+	            MainGamePanel.pause();
+	            Log.i("ship", "pause");
+	        }
+	    }
+	}
+	
+	public void crash(){
+	    crashed = true;
+	    timer = 0;
+	}
+	
 	public void resetRidden()
-	{
+	{   
 	    y = tempY;	    
 	    tempY = Water.height-Water.defHeight+20;
 	}
@@ -75,7 +105,8 @@ public class Ship {
 	}
 	
 	public void draw(Canvas canvas) {
-		canvas.drawBitmap(currentBitmap, x - width/2, y - height, null);
+	    if(state != 2)
+	        canvas.drawBitmap(currentBitmap, x - width/2, y - height-5, null);
 	}
 	
 	public Bitmap getCurrentBitmap() {
@@ -88,9 +119,6 @@ public class Ship {
 		}
 		else if (state == 1) {
 			currentBitmap = bitmaps[1];
-		}
-		else if (state == 2) {
-			currentBitmap = bitmaps[2];
 		}
 	}
 }

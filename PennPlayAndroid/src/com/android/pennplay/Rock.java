@@ -39,13 +39,13 @@ public class Rock {
 	}
 	
 	public boolean intersectsShip(Ship s) {
-	    int shipX =s.getX() - x;
+	    int shipX = s.getX()-x;
         int shipY = s.getY()-y;
 
         if(shipX >= 0 && shipX < width && shipY >= 0 && shipY < height){
             int color = bitmap.getPixel(shipX, shipY);
             
-            if(color == Color.TRANSPARENT)
+            if(color != Color.TRANSPARENT)
                 return true;
         }          
         return false;

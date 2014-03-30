@@ -44,9 +44,9 @@ public class Water {
             Wave w = waves.get(i);
             w.update();
             
-            if(w.getHeight() > height - defHeight || w.getLoc() < -w.getBitmap().getWidth())
+            if(w.getHeight() > height - defHeight + 50 || w.getLoc() < -w.getBitmap().getWidth()){
                 waves.remove(i); 
-            
+            }
             //collision detection with ship
             ship.rideWave(w);
         }

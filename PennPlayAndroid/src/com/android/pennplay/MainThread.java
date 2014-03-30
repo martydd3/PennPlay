@@ -43,12 +43,32 @@ public class MainThread extends Thread{
         super();
         this.mSurfaceHolder = surfaceHolder;
         this.mGamePanel = gamePanel;
+        
+        mPause = false;
+        mPauseLock = new Object();
     }
     
     //holds the state of game
     private boolean mRunning;
+    
+    private Object mPauseLock;
+    public boolean mPause;
+    
     public void setRunning(boolean running){
         mRunning = running;
+    }
+    
+    public void onPause(){
+        synchronized(mPauseLock){
+            mPause = true;
+        }
+    }
+    
+    public void onResume(){
+        synchronized(mPauseLock){
+            mPause = false;
+            mPauseLock.notifyAll();
+        }
     }
     
     @SuppressLint("WrongCall")
@@ -68,6 +88,18 @@ public class MainThread extends Thread{
         sleepTime = 0;
         
         while(mRunning){
+            synchronized(mPauseLock){
+                while(mPause){
+                    try{
+                        mPauseLock.wait();
+                    }
+                    catch(InterruptedException e){
+                        
+                    }
+                }
+            }
+            
+            
             //update game state
             
             //render state
@@ -80,7 +112,9 @@ public class MainThread extends Thread{
                     framesSkipped = 0;
                     
                     mGamePanel.update();
-                    mGamePanel.onDraw(canvas);
+                    
+                    if(canvas != null)
+                        mGamePanel.onDraw(canvas);
                     
                     timeDiff = System.currentTimeMillis() - beginTime;
                     sleepTime = (int)(FRAME_PERIOD - timeDiff);
